@@ -1,0 +1,93 @@
+.container {
+  display: flex;
+}
+
+.grid {
+  width: 200px;
+  height: 400px;
+  display: flex;
+  flex-wrap: wrap;
+  background-color: rgb(134, 130, 130);
+  position: absolute;
+  top: 1%;
+  left: 0;
+  right: 2%;
+
+  margin: auto;
+}
+
+.grid div {
+  height: 20px;
+  width: 20px;
+}
+
+.tetromino {
+  background-color: blue;
+}
+
+.mini-grid {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  flex-wrap: wrap;
+  background-color: rgb(234, 236, 223);
+  position: absolute;
+  right: 1%;
+  top: 1%;
+}
+
+.mini-grid div {
+  height: 20px;
+  width: 20px;
+}
+
+.keys {
+  font-family: "Lato", sans-serif;
+  text-align: center;
+  width: 200px;
+  margin: auto;
+  position: absolute;
+  bottom: 3%;
+  right: 0;
+  left: 0;
+}
+.arr {
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  background: grey;
+  color: white;
+  font-size: 20px;
+  border-right: 10px solid #4d4d4d;
+  border-bottom: 10px solid #4d4d4d;
+  border-left: 10px solid #5a5a5a;
+  border-top: 10px solid #676767;
+  display: inline-block;
+  margin: 5px;
+  transition: all 0.05s linear;
+  user-select: none;
+}
+.arr:active {
+  border-bottom: 8px solid #4d4d4d;
+  text-shadow: 0 0 10px white, 0 0 10px white, 0 0 20px white;
+  transform: translate(0, 2px);
+}
+.up {
+  position: relative;
+  top: -4px;
+}
+.pressed {
+  border-bottom: 8px solid #4d4d4d;
+  text-shadow: 0 0 10px white;
+  transform: translate(0, 2px);
+}
+
+body {
+  touch-action: pan-x pan-y;
+}
+
+* {
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+}
