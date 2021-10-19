@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let nextRandom = 0
   let timerId
   let score = 0
+  let isGameStart = false;
   const colors = [
     'orange',
     'red',
@@ -86,6 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //assign functions to keyCodes
   function control(e) {
+    if(!isGameStart) return;
     if(e.keyCode === 37) {
       moveLeft()
     } else if (e.keyCode === 38) {
@@ -100,6 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //move down function
   function moveDown() {
+    if(!isGameStart) return;
     undraw()
     currentPosition += width
     draw()
@@ -127,6 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //move the tetromino left, unless is at the edge or there is a blockage
   function moveLeft() {
+    if(!isGameStart) return;
     undraw()
     const isAtLeftEdge = current.some(index => (currentPosition + index) % width === 0)
     if(!isAtLeftEdge) currentPosition -=1
@@ -138,6 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //move the tetromino right, unless is at the edge or there is a blockage
   function moveRight() {
+    if(!isGameStart) return;
     undraw()
     const isAtRightEdge = current.some(index => (currentPosition + index) % width === width -1)
     if(!isAtRightEdge) currentPosition +=1
@@ -175,6 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   //rotate the tetromino
   function rotate() {
+    if(!isGameStart) return;
     undraw()
     currentRotation ++
     if(currentRotation === current.length) { //if the current rotation gets to 4, make it go back to 0
@@ -219,10 +225,12 @@ document.addEventListener('DOMContentLoaded', () => {
   //add functionality to the button
   startBtn.addEventListener('click', () => {
     if (timerId) {
+      isGameStart = false;
       clearInterval(timerId)
       timerId = null
       startBtn.innerHTML = "Start"
     } else {
+      isGameStart = true;
       startBtn.innerHTML = "Pause"
       draw()
       timerId = setInterval(moveDown, 1000)
