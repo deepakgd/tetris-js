@@ -70,17 +70,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //draw the Tetromino
   function draw() {
-    current.forEach(index => {
-      squares[currentPosition + index].classList.add('tetromino')
-      squares[currentPosition + index].style.backgroundColor = colors[random]
+    current.forEach(position => {
+      squares[currentPosition + position].classList.add('tetromino')
+      squares[currentPosition + position].style.backgroundColor = colors[random]
     })
   }
 
   //undraw the Tetromino
   function undraw() {
-    current.forEach(index => {
-      squares[currentPosition + index].classList.remove('tetromino')
-      squares[currentPosition + index].style.backgroundColor = ''
+    current.forEach(position => {
+      squares[currentPosition + position].classList.remove('tetromino')
+      squares[currentPosition + position].style.backgroundColor = ''
 
     })
   }
@@ -114,8 +114,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //freeze function
   function freeze() {
-    if(current.some(index => squares[currentPosition + index + width].classList.contains('taken'))) {
-      current.forEach(index => squares[currentPosition + index].classList.add('taken'))
+    if(current.some(position => squares[currentPosition + position + width].classList.contains('taken'))) {
+      current.forEach(position => squares[currentPosition + position].classList.add('taken'))
       //start a new tetromino falling
       random = nextRandom
       nextRandom = Math.floor(Math.random() * theTetrominoes.length)
@@ -132,9 +132,9 @@ document.addEventListener('DOMContentLoaded', () => {
   function moveLeft() {
     if(!isGameStart) return;
     undraw()
-    const isAtLeftEdge = current.some(index => (currentPosition + index) % width === 0)
+    const isAtLeftEdge = current.some(position => (currentPosition + position) % width === 0)
     if(!isAtLeftEdge) currentPosition -=1
-    if(current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
+    if(current.some(position => squares[currentPosition + position].classList.contains('taken'))) {
       currentPosition +=1
     }
     draw()
@@ -144,9 +144,9 @@ document.addEventListener('DOMContentLoaded', () => {
   function moveRight() {
     if(!isGameStart) return;
     undraw()
-    const isAtRightEdge = current.some(index => (currentPosition + index) % width === width -1)
+    const isAtRightEdge = current.some(position => (currentPosition + position) % width === width -1)
     if(!isAtRightEdge) currentPosition +=1
-    if(current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
+    if(current.some(position => squares[currentPosition + position].classList.contains('taken'))) {
       currentPosition -=1
     }
     draw()
@@ -155,11 +155,11 @@ document.addEventListener('DOMContentLoaded', () => {
   
   ///FIX ROTATION OF TETROMINOS A THE EDGE 
   function isAtRight() {
-    return current.some(index=> (currentPosition + index + 1) % width === 0)  
+    return current.some(position=> (currentPosition + position + 1) % width === 0)  
   }
   
   function isAtLeft() {
-    return current.some(index=> (currentPosition + index) % width === 0)
+    return current.some(position=> (currentPosition + position) % width === 0)
   }
   
   function checkRotatedPosition(P){
@@ -216,9 +216,9 @@ document.addEventListener('DOMContentLoaded', () => {
       square.classList.remove('tetromino')
       square.style.backgroundColor = ''
     })
-    upNextTetrominoes[nextRandom].forEach( index => {
-      displaySquares[displayIndex + index].classList.add('tetromino')
-      displaySquares[displayIndex + index].style.backgroundColor = colors[nextRandom]
+    upNextTetrominoes[nextRandom].forEach( position => {
+      displaySquares[displayIndex + position].classList.add('tetromino')
+      displaySquares[displayIndex + position].style.backgroundColor = colors[nextRandom]
     })
   }
 
@@ -249,13 +249,13 @@ document.addEventListener('DOMContentLoaded', () => {
     for (let i = 0; i < 199; i +=width) {
       const row = [i, i+1, i+2, i+3, i+4, i+5, i+6, i+7, i+8, i+9]
 
-      if(row.every(index => squares[index].classList.contains('taken'))) {
+      if(row.every(position => squares[position].classList.contains('taken'))) {
         score +=10
         scoreDisplay.innerHTML = score
-        row.forEach(index => {
-          squares[index].classList.remove('taken')
-          squares[index].classList.remove('tetromino')
-          squares[index].style.backgroundColor = ''
+        row.forEach(position => {
+          squares[position].classList.remove('taken')
+          squares[position].classList.remove('tetromino')
+          squares[position].style.backgroundColor = ''
         })
         const squaresRemoved = squares.splice(i, width)
         squares = squaresRemoved.concat(squares)
@@ -266,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //game over
   function gameOver() {
-    if(current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
+    if(current.some(position => squares[currentPosition + position].classList.contains('taken'))) {
       scoreDisplay.innerHTML = 'end'
       clearInterval(timerId)
     }
