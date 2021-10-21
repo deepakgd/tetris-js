@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let timerId
   let score = 0
   let isGameStart = false;
+  let defaultPower = 100;
+  let doublePower = 200;
   const colors = [
     'orange',
     'red',
@@ -261,8 +263,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const row = [i, i+1, i+2, i+3, i+4, i+5, i+6, i+7, i+8, i+9]
 
       if(row.every(position => squares[position].classList.contains('taken'))) {
-        score +=10
-        scoreDisplay.innerHTML = score
+        score += defaultPower;
+        scoreDisplay.innerHTML = score;
         row.forEach(position => {
           squares[position].classList.remove('taken')
           squares[position].classList.remove('tetromino')
