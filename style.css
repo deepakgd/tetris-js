@@ -85,6 +85,8 @@
 
 body {
   touch-action: pan-x pan-y;
+  background-color: black;
+  color: #ffffff;
 }
 
 * {

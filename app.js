@@ -2,7 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const grid = document.querySelector('.grid')
   let squares = Array.from(document.querySelectorAll('.grid div'))
   const scoreDisplay = document.querySelector('#score')
-  const startBtn = document.querySelector('#start-button')
+  const startBtn = document.querySelector('#start')
+  const restartBtn = document.querySelector('#restart')
   const rotateBtn = document.getElementById('rotate')
   const leftBtn = document.getElementById('left')
   const rightBtn = document.getElementById('right')
@@ -13,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let timerId
   let score = 0
   let isGameStart = false;
+  let isGameOver = false;
   const defaultPower = 100;
   const doublePower = 200;
   const colors = [
@@ -105,29 +107,52 @@ document.addEventListener('DOMContentLoaded', () => {
   //move down function
   function moveDown() {
     if(!isGameStart) return;
-    undraw()
-    currentPosition += width
-    draw()
-    freeze()
-    // setTimeout(function(){
-    //   freeze()
-    // }, 500)
+    if(checkAvailability(current, currentPosition+width)) {
+      undraw()
+      currentPosition += width
+      draw()
+    }
+    
+    // freeze()
+    setTimeout(function(){
+      freeze()
+    }, 200)
   }
 
   //freeze function
   function freeze() {
+    console.log("freeze invoked...")
     if(current.some(position => squares[currentPosition + position + width].classList.contains('taken'))) {
       current.forEach(position => squares[currentPosition + position].classList.add('taken'))
       //start a new tetromino falling
       random = nextRandom
       nextRandom = Math.floor(Math.random() * theTetrominoes.length)
-      current = theTetrominoes[random][currentRotation]
-      currentPosition = 4
+      current = theTetrominoes[random][currentRotation];
+      currentPosition = 4;
+
       draw()
       displayShape()
+      
+      // if(current.some(position => squares[currentPosition + position].classList.contains('tetromino'))) gameOver();
+      
+
+      
+    //   let newPositions = theTetrominoes[random][currentRotation];
+    //   let newPosition = 4;
+    //   if(checkAvailability(newPositions, newPosition)){
+    //     current = newPositions;
+    //     currentPosition = newPosition;
+    //     draw();
+    //     displayShape();
+    // }
       addScore()
       gameOver()
     }
+  }
+
+  // check box already filled or not
+  function checkAvailability(boxes, boxPosition){
+    return !boxes.some(box => squares[boxPosition + box].classList.contains('taken'));
   }
 
   //move the tetromino left, unless is at the edge or there is a blockage
@@ -251,6 +276,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
 
+  // restart is temporory dev feature so refreshing page
+  restartBtn.addEventListener('click', () => {
+    window.location.reload()
+  })
+
   // joystick listeners
   rotateBtn.addEventListener('click', rotate);
   leftBtn.addEventListener('click', moveLeft);
@@ -283,6 +313,9 @@ document.addEventListener('DOMContentLoaded', () => {
       scoreDisplay.innerHTML = 'end';
       clearInterval(timerId);
       isGameStart = false;
+      isGameOver = true;
+      startBtn.style.display = 'none';
+      restartBtn.style.display = 'block';
     }
   }
 
