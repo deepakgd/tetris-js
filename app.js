@@ -13,8 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let timerId
   let score = 0
   let isGameStart = false;
-  let defaultPower = 100;
-  let doublePower = 200;
+  const defaultPower = 100;
+  const doublePower = 200;
   const colors = [
     'orange',
     'red',
@@ -280,8 +280,9 @@ document.addEventListener('DOMContentLoaded', () => {
   //game over
   function gameOver() {
     if(current.some(position => squares[currentPosition + position].classList.contains('taken'))) {
-      scoreDisplay.innerHTML = 'end'
-      clearInterval(timerId)
+      scoreDisplay.innerHTML = 'end';
+      clearInterval(timerId);
+      isGameStart = false;
     }
   }
 
