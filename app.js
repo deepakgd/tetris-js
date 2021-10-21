@@ -181,14 +181,26 @@ document.addEventListener('DOMContentLoaded', () => {
   //rotate the tetromino
   function rotate() {
     if(!isGameStart) return;
-    undraw()
+   
     currentRotation ++
     if(currentRotation === current.length) { //if the current rotation gets to 4, make it go back to 0
       currentRotation = 0
     }
-    current = theTetrominoes[random][currentRotation]
-    checkRotatedPosition()
-    draw()
+    // get next position
+    let newPositions = theTetrominoes[random][currentRotation];
+    // check new position already taken, if taken undo rotation and deny rotation
+    if(newPositions.some(position => squares[currentPosition + position].classList.contains('taken'))) {
+      currentRotation --;
+      if(currentRotation < 0) { //if the current rotation gets to -1, make it go back to last position
+        currentRotation = current.length - 1;
+      }
+    }else { // rotation possible earse and rotate to new position
+      undraw()
+      current = newPositions;
+      checkRotatedPosition()
+      draw()
+    }
+    
   }
   /////////
 
