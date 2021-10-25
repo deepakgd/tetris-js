@@ -8,7 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const leftBtn = document.getElementById('left')
   const rightBtn = document.getElementById('right')
   const downBtn = document.getElementById('down')
+  const timer = document.getElementById('timer');
 
+  // number of columns 
   const width = 10
   let nextRandom = 0
   let timerId
@@ -23,7 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
     'purple',
     'green',
     'blue'
-  ]
+  ];
+  let time = 60;
 
   //The Tetrominoes
   const lTetromino = [
@@ -130,7 +133,9 @@ document.addEventListener('DOMContentLoaded', () => {
       current = theTetrominoes[random][currentRotation];
       currentPosition = 4;
 
+      // create new shape
       draw()
+      // show next shape
       displayShape()
       
       // if(current.some(position => squares[currentPosition + position].classList.contains('tetromino'))) gameOver();
@@ -145,8 +150,11 @@ document.addEventListener('DOMContentLoaded', () => {
     //     draw();
     //     displayShape();
     // }
+
+    // calculate score
       addScore()
-      gameOver()
+      // game over if all filled
+      if(current.some(position => squares[currentPosition + position].classList.contains('taken'))) gameOver();
     }
   }
 
@@ -158,12 +166,14 @@ document.addEventListener('DOMContentLoaded', () => {
   //move the tetromino left, unless is at the edge or there is a blockage
   function moveLeft() {
     if(!isGameStart) return;
+    // clear shape
     undraw()
     const isAtLeftEdge = current.some(position => (currentPosition + position) % width === 0)
     if(!isAtLeftEdge) currentPosition -=1
     if(current.some(position => squares[currentPosition + position].classList.contains('taken'))) {
       currentPosition +=1
     }
+    // draw new shape
     draw()
   }
 
@@ -261,20 +271,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //add functionality to the button
   startBtn.addEventListener('click', () => {
-    if (timerId) {
-      isGameStart = false;
-      clearInterval(timerId)
-      timerId = null
-      startBtn.innerHTML = "Start"
-    } else {
-      isGameStart = true;
-      startBtn.innerHTML = "Pause"
-      draw()
-      timerId = setInterval(moveDown, 1000)
-      nextRandom = Math.floor(Math.random()*theTetrominoes.length)
-      displayShape()
-    }
+    if (timerId) pauseGame();
+    else startGame();
   })
+
+  function pauseGame(){
+    isGameStart = false;
+    clearInterval(timerId);
+    timerId = null;
+    startBtn.innerHTML = "Start";
+    clearInterval(window.mainTimer);
+  }
+
+  function startGame(){
+    isGameStart = true;
+    startBtn.innerHTML = "Pause"
+    draw()
+    timerId = setInterval(moveDown, 1000)
+    nextRandom = Math.floor(Math.random()*theTetrominoes.length)
+    displayShape()
+    // start timer
+    window.mainTimer = window.setInterval(function () {
+      checkTimer(); // timer
+    }, 1000);
+  }
 
   // restart is temporory dev feature so refreshing page
   restartBtn.addEventListener('click', () => {
@@ -293,7 +313,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const row = [i, i+1, i+2, i+3, i+4, i+5, i+6, i+7, i+8, i+9]
 
       if(row.every(position => squares[position].classList.contains('taken'))) {
-        score += defaultPower;
+        if(row.some(position => squares[position].style.backgroundColor === "purple")) {
+          score += doublePower;
+        }else score += defaultPower;
         scoreDisplay.innerHTML = score;
         row.forEach(position => {
           squares[position].classList.remove('taken')
@@ -309,14 +331,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //game over
   function gameOver() {
-    if(current.some(position => squares[currentPosition + position].classList.contains('taken'))) {
-      scoreDisplay.innerHTML = 'end';
       clearInterval(timerId);
       isGameStart = false;
       isGameOver = true;
       startBtn.style.display = 'none';
       restartBtn.style.display = 'block';
+  }
+
+  // show timer
+  function checkTimer() {
+    if (isGameOver) return window.clearInterval(window.mainTimer);
+    time = time - 1;
+    timer.innerHTML = getTime();
+    if (time === 0) {
+      gameOver();
     }
+  }
+
+  // format timer 
+  function getTime() {
+    if (time <= 9) return '00:0' + time;
+    else return '00:' + time;
   }
 
 })
