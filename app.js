@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const rightBtn = document.getElementById('right')
   const downBtn = document.getElementById('down')
   const timer = document.getElementById('timer');
+  const gameOverText = document.getElementById('gameOverText')
 
   // number of columns 
   const width = 10
@@ -285,7 +286,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function startGame(){
     isGameStart = true;
-    startBtn.innerHTML = "Pause"
+    startBtn.innerHTML = "Pause";
+    gameOverText.style.display = "none";
     draw()
     timerId = setInterval(moveDown, 1000)
     nextRandom = Math.floor(Math.random()*theTetrominoes.length)
@@ -336,6 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
       isGameOver = true;
       startBtn.style.display = 'none';
       restartBtn.style.display = 'block';
+      gameOverText.style.display = "block";
   }
 
   // show timer

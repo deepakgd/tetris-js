@@ -93,3 +93,17 @@ body {
   -ms-touch-action: manipulation;
   touch-action: manipulation;
 }
+
+.gameOver{
+  width: 7%;
+  height: 10%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  z-index: 1;
+  background-color: purple;
+  padding: 10px;
+}
